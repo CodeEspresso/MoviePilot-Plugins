@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Plex自动扫描插件配置</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#7B61FF',
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+            <i class="fa fa-film text-primary mr-2"></i> Plex自动扫描插件配置
+        </h2>
+        
+        <div class="space-y-6">
+            <!-- Plex服务器选择 -->
+            <div class="border border-gray-200 rounded-lg p-4">
+                <h3 class="font-semibold text-gray-700 mb-3 flex items-center">
+                    <i class="fa fa-server text-primary mr-2"></i> Plex服务器配置
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="col-span-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">选择Plex服务器</label>
+                        <select id="plex_server_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition">
+                            <option value="">-- 请选择 --</option>
+                        </select>
+                        <p class="text-xs text-gray-500 mt-1">选择已在MoviePilot中配置的Plex服务器</p>
+                    </div>
+                    
+                    <div class="col-span-1 flex items-end">
+                        <button id="btn_load_sections" class="w-full bg-primary hover:bg-primary/90 text-white py-2 px-4 rounded-md transition flex items-center justify-center">
+                            <i class="fa fa-refresh mr-2"></i> 加载媒体库
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="sections_container" class="mt-4 hidden">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">选择媒体库</label>
+                    <select id="plex_section_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition">
+                        <option value="">-- 请选择 --</option>
+                    </select>
+                </div>
+                
+                <div class="mt-3 flex items-center">
+                    <button id="btn_test_connection" class="bg-gray-700 hover:bg-gray-600 text-white py-1.5 px-3 rounded-md text-sm transition flex items-center">
+                        <i class="fa fa-check-circle mr-1"></i> 测试连接
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 监控目录配置 -->
+            <div class="border border-gray-200 rounded-lg p-4">
+                <h3 class="font-semibold text-gray-700 mb-3 flex items-center">
+                    <i class="fa fa-folder-open text-primary mr-2"></i> 监控目录配置
+                </h3>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">监控目录</label>
+                        <input type="text" id="watch_directory" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" placeholder="/mnt/cloudrive/Movies">
+                        <p class="text-xs text-gray-500 mt-1">CloudDrive2挂载的本地媒体目录</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">扫描间隔 (秒)</label>
+                        <input type="number" id="scan_interval" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" value="300" min="60">
+                        <p class="text-xs text-gray-500 mt-1">定时扫描的间隔时间，建议不小于60秒</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 路径映射配置 -->
+            <div class="border border-gray-200 rounded-lg p-4">
+                <h3 class="font-semibold text-gray-700 mb-3 flex items-center">
+                    <i class="fa fa-exchange text-primary mr-2"></i> 路径映射配置
+                </h3>
+                
+                <p class="text-sm text-gray-600 mb-3">如果本地挂载路径与Plex服务器上的路径不一致，需要配置映射关系</p>
+                
+                <div id="path_mappings_container">
+                    <!-- 路径映射条目会动态添加到这里 -->
+                </div>
+                
+                <button id="btn_add_mapping" class="mt-2 bg-gray-700 hover:bg-gray-600 text-white py-1.5 px-3 rounded-md text-sm transition flex items-center">
+                    <i class="fa fa-plus mr-1"></i> 添加映射
+                </button>
+            </div>
+            
+            <!-- 操作按钮 -->
+            <div class="flex justify-end space-x-3">
+                <button id="btn_save" class="bg-primary hover:bg-primary/90 text-white py-2 px-6 rounded-md transition">
+                    保存配置
+                </button>
+                <button id="btn_cancel" class="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-6 rounded-md transition">
+                    取消
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="config.js"></script>
+</body>
+</html>

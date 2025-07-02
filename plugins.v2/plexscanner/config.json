@@ -1,0 +1,13 @@
+{
+    "watch_directory": "/mnt/clouddrive/Movies",
+    "scan_interval": 300,
+    "plex_server": "http://localhost:32400",
+    "plex_token": "YOUR_PLEX_TOKEN",
+    "plex_section_id": 1,
+    "path_mappings": [
+        {
+            "local_path": "/mnt/clouddrive/Movies",
+            "plex_path": "/data/media/Movies"
+        }
+    ]
+}    
